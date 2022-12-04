@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="question-item">
+    <div class="question-list">
+        {% for question in page.object_list %}
+        <h2>{{ question.question }}</h2>
+        <ul>
+            <li><input type="checkbox"> {{ question.answer_1 }}</li>
+            <li><input type="checkbox"> {{ question.answer_2 }}</li>
+        </ul>
+        {% endfor %}
+        {% if page.has_previous %}
+            <a href="?page={{ page.previous_page_number }}">back</a>
+        {% endif %}
+        {% if page.has_next %}
+            <a href="?page={{ page.next_page_number }}">next</a>
+        {% else %}
+            <a href="?page={{ page.paginator.num_pages }}">result</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

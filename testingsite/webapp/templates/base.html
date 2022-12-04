@@ -8,16 +8,23 @@
     <link rel="stylesheet" href="/static/main.css">
     <link rel="stylesheet" href="/static/home.css">
     <link rel="stylesheet" href="/static/login.css">
+    <link rel="stylesheet" href="/static/question.css">
     <title>testo</title>
 </head>
 <body>
     <div class="header">
+        <div class="header-start">
+            <a href="{% url 'home' %}" class="mobile-btn">
+                <span class="material-icons">testo</span>
+            </a>
+        </div>
         <div class="header-end">
             {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="link-fill">Logout</a>
                 <a href="#">Hi, {{ user.username}}!</a>
             {% else %}
-            <a href="{% url 'signup' %}">Sign up</a>
-            <a href="{% url 'login' %}" class="link-fill">Sign In</a>
+                <a href="{% url 'signup' %}">Sign up</a>
+                <a href="{% url 'login' %}" class="link-fill">Sign In</a>
             {% endif %}
         </div>
     </div>
