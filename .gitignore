@@ -1,1 +1,5 @@
 /venv/*
+/testingsite/testingsite/__pycache__/*
+/testingsite/webapp/migrations/__pycache__/*
+/testingsite/webapp/__pycache__/*
+.DS_Store
