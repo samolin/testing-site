@@ -29,6 +29,12 @@ def answer_home(request, test_name=None):
     question_id = page.object_list[0].id
     form = AnswerForm(question_id=question_id)
     test_url = page.object_list[0].test.slug
+    context = {
+        'page': page, 
+        'form': form, 
+        'test_url': test_url,
+        'amount_pages': paginator.num_pages,
+    }
     if request.method == 'POST':
         print('request_post: ', request.POST)
         question = Question.objects.get(title=request.POST['question'])
@@ -50,24 +56,9 @@ def answer_home(request, test_name=None):
         else:
             print('We are in validation error')
             form_errors = form.errors['choice'].as_text().replace('*', '')
-            print("obj", page.object_list)
-            #form = AnswerForm(question_id=question_id)
             form = AnswerForm(question_id=question_id)
-            context = {
-                'page': page, 
-                'form': form, 
-                'test_url': test_url,
-                'form_errors': form_errors,
-                'amount_pages': paginator.num_pages,
-            }
+            context['form_errors'] = form_errors
             return render(request, 'question.html', context) 
-    print(page.object_list[0].id)
-    context = {
-        'page': page, 
-        'form': form, 
-        'test_url': test_url,
-        'amount_pages': paginator.num_pages,
-    }
     return render(request, 'question.html', context) 
 
 
