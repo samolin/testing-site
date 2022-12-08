@@ -5,6 +5,10 @@ from .models import Answer, Choice
 
 class AnswerForm(forms.Form):
 
+    class Meta:
+        model = Answer
+        fields = ['choice']
+
     def __init__(self, *args, **kwargs):
         print('kwargs', kwargs)
         if 'question_id' in kwargs:
@@ -21,10 +25,6 @@ class AnswerForm(forms.Form):
             error_messages={'required': 'Вы не выбрали ничего'}
         )
 
-    class Meta:
-        model = Answer
-        fields = ['choice']
-
 
 class ChoiceAdminForm(forms.ModelForm):
 
@@ -35,9 +35,7 @@ class ChoiceAdminForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super(ChoiceAdminForm, self).clean()
         if cleaned_data.get('right_answer') == False:
-            answers_choices = Choice.objects.filter(question = cleaned_data.get('question'))
-            various_choices = [choice.right_answer for choice in answers_choices]
-            if True not in various_choices:
+            if Choice.objects.filter(question = cleaned_data.get('question')).filter(right_answer = True).first() == None:
                 raise ValidationError('Хотя бы один ответ должен быть правильным')
         return self.cleaned_data
 
