@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="question-item">
+    <div class="question-list">
+        {% for question in page.object_list %}
+        <h2>{{ question.title }}</h2>
+            {% for answer in choices %}
+                <ul>
+                    <form method="post">
+                        {% csrf_token %}
+                    <li><input type="submit"> {{ answer.title }}</li>
+                </form>
+            </ul>
+            {% endfor %}
+        {% endfor %}
+    </div>
+    {% if page.has_previous %}
+        <a href="?page={{ page.previous_page_number }}">back</a>
+    {% endif %}
+    {% if page.has_next %}
+        <a href="?page={{ page.next_page_number }}">next</a>
+    {% else %}
+        <a href="?page={{ page.paginator.num_pages }}">result</a>
+    {% endif %}
+</div>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.question }}
+        {{ form.choice }}
+        <input type="submit" name="Submit">
+    </form>
+{% endblock %}

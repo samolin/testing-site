@@ -4,20 +4,28 @@
 <div class="question-item">
     <div class="question-list">
         {% for question in page.object_list %}
-        <h2>{{ question.question }}</h2>
-        <ul>
-            <li><input type="checkbox"> {{ question.answer_1 }}</li>
-            <li><input type="checkbox"> {{ question.answer_2 }}</li>
-        </ul>
+            <form action="" id="answer_form" method="POST">
+                {% csrf_token %}    
+                <input type="hidden" name="question" id="question" value="{{ question }}">
+                <h2>{{ question }}</h2>
+                {{ form.choice }}
+            </form>
         {% endfor %}
-        {% if page.has_previous %}
-            <a href="?page={{ page.previous_page_number }}">back</a>
-        {% endif %}
-        {% if page.has_next %}
-            <a href="?page={{ page.next_page_number }}">next</a>
-        {% else %}
-            <a href="?page={{ page.paginator.num_pages }}">result</a>
-        {% endif %}
     </div>
+    <div class="page">{{ page.number }}/{{ amount_pages }}</div>
+    {% if page.has_next %}
+        <a href="#" onclick="document.getElementById('answer_form').submit(); return false;" class="sendform-btn">next</a> 
+    {% else %}
+        <a href="#" onclick="document.getElementById('answer_form').submit(); return false;" class="sendform-btn">result</a>
+    {% endif %}
 </div>
+
 {% endblock %}
+{% block alert %}
+    {% if form_errors %}
+        <div class="container_validation_error" onclick="this.style.display='none';">
+            <h1>{{ form_errors }}</h1>
+        </div>
+    {% endif %}
+{% endblock %}
+

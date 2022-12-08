@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/static/home.css">
     <link rel="stylesheet" href="/static/login.css">
     <link rel="stylesheet" href="/static/question.css">
+    <link rel="stylesheet" href="/static/result.css">
     <title>testo</title>
 </head>
 <body>
@@ -28,7 +29,11 @@
             {% endif %}
         </div>
     </div>
-    {% block content %}
-    {% endblock %}
+    <div class="content-wrapper">
+        {% block content %}
+        {% endblock %}
+        {% block alert %}
+        {% endblock %}
+    </div>
 </body>
 </html>
