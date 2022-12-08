@@ -43,12 +43,16 @@ def answer_home(request, test_name=None):
         if form.is_valid():
             choice = form.cleaned_data['choice']
             print("cleaned_data: ", form.cleaned_data)
-            obj = Answer(
-                user=request.user,
-                question=question,
-                choice=Choice.objects.filter(question=question).get(title=choice),
-            )
-            obj.save()
+            try:
+                answer = Answer.objects.get(user=request.user, question=question)
+                answer.choice=Choice.objects.filter(question=question).get(title=choice)
+            except:
+                answer = Answer(
+                    user=request.user,
+                    question=question,
+                    choice=Choice.objects.filter(question=question).get(title=choice),
+                )
+            answer.save()
             print('Form is saved')
             if page.has_next() == True:
                 return redirect(f'/{test_name}/?page={page.next_page_number()}')
