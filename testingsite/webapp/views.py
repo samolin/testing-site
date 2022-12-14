@@ -36,13 +36,12 @@ def answer_home(request, test_name=None):
         'amount_pages': paginator.num_pages,
     }
     if request.method == 'POST':
-        print('request_post: ', request.POST)
         question = Question.objects.get(title=request.POST['question'])
-        form = AnswerForm({'choice':request.POST.get('choice'), 'question_id':question_id})
-        form.fields['choice'].choices = [(request.POST.get('choice'), request.POST.get('choice'),)]
+        form = AnswerForm(request.POST)
+        unit = request.POST.get('choice')
+        form.fields['choice'].choices = [(unit, unit,)]
         if form.is_valid():
             choice = form.cleaned_data['choice']
-            print("cleaned_data: ", form.cleaned_data)
             try:
                 answer = Answer.objects.get(user=request.user, question=question)
                 answer.choice=Choice.objects.filter(question=question).get(title=choice)
@@ -53,21 +52,18 @@ def answer_home(request, test_name=None):
                     choice=Choice.objects.filter(question=question).get(title=choice),
                 )
             answer.save()
-            print('Form is saved')
             if page.has_next() == True:
                 return redirect(f'/{test_name}/?page={page.next_page_number()}')
             return redirect(f'/{test_name}/result')
         else:
-            print('We are in validation error')
             form_errors = form.errors['choice'].as_text().replace('*', '')
-            form = AnswerForm(question_id=question_id)
             context['form_errors'] = form_errors
             return render(request, 'question.html', context) 
     return render(request, 'question.html', context) 
 
 
 @login_required
-def result(request, test_name=None):
+def result(request, test_name):
     test_id = Test.objects.filter(slug=test_name).first().id
     result = Answer.objects.filter(user=request.user, question__test=test_id).all()
     statistic = amount_of_right_answers(result)

@@ -1,7 +1,8 @@
 from django.contrib import admin
+from django.contrib.admin import helpers
 
 from .models import Test, Question, Choice, Answer
-from .forms import ChoiceAdminForm, ChoiceInlineFormset
+from .forms import ChoiceInlineFormset
 
 
 class QuestionInline(admin.TabularInline):
@@ -26,16 +27,7 @@ class TestAdmin(admin.ModelAdmin):
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ['title', 'test']
     list_filter = ['test']
-    inlines = [
-        ChoiceInline,
-    ]
-
-
-@admin.register(Choice)
-class ChoiceAdmin(admin.ModelAdmin):
-    list_display = ['question', 'title', 'right_answer']
-    list_filter = ['question']
-    form = ChoiceAdminForm
+    inlines = [ChoiceInline]
 
 
 @admin.register(Answer)

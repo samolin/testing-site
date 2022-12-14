@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Test(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100)
@@ -18,7 +19,8 @@ class Question(models.Model):
 
 
 class Choice(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.DO_NOTHING, related_name='choice')
+    
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='choice')
     title = models.CharField(max_length=4096)
     right_answer = models.BooleanField(default=False)
 
@@ -27,9 +29,9 @@ class Choice(models.Model):
 
 
 class Answer(models.Model):
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    question = models.ForeignKey(Question, on_delete=models.DO_NOTHING)
-    choice = models.ForeignKey(Choice, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.choice.title
